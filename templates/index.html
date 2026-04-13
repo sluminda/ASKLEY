@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASKLEY</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand">
+            <img src="{{ url_for('static', filename='logo-small.png') }}" alt="Askley Logo" class="logo-img">
+            <div>
+                <h2>ASKLEY</h2>
+                <p>Flask + Ollama</p>
+            </div>
+        </div>
+
+        <button class="new-chat-btn" onclick="startNewChat()">+ New Chat</button>
+
+        <div class="developers">
+            <h3>Developers</h3>
+            <ul>
+                <li>Radowan</li>
+                <li>Alpona</li>
+                <li>Jarin</li>
+                <li>Lumi</li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <h1>ASKLEY</h1>
+                <p>Your smart AI chatbot assistant</p>
+            </div>
+        </header>
+
+        <section id="chat-box" class="chat-box">
+            <div class="message-row bot-row">
+                <div class="avatar bot-avatar"></div>
+                <div class="message bot">
+                    Hello! I am Askley. How can I help you today?
+                </div>
+            </div>
+        </section>
+
+        <form id="chat-form" class="chat-form">
+            <input type="text" id="message" placeholder="Type your message..." required>
+            <button type="submit" id="send-btn">Send</button>
+        </form>
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
