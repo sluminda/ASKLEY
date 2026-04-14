@@ -70,7 +70,6 @@ The main purpose of this application is to:
 - provide an AI-powered chatbot interface for users
 - allow real-time interaction through the web
 - integrate a locally hosted large language model using Ollama
-- demonstrate full-stack web development and deployment
 - create a system that is lightweight, practical, and extensible
 
 In short, Askley functions as a browser-based AI assistant powered by a local model.

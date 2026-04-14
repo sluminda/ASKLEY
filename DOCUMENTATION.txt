@@ -1,0 +1,279 @@
+========================================
+ASKLEY FULL SETUP GUIDE (LOCAL → VPS)
+========================================
+
+=====================
+0. LOCAL DEVELOPMENT
+=====================
+
+Before deploying to VPS, test everything locally.
+
+STEP 1: INSTALL REQUIREMENTS
+---------------------------
+Install:
+- Python 3
+- Git
+
+(Optional but recommended)
+- VS Code
+
+
+STEP 2: CLONE PROJECT
+--------------------
+git clone https://github.com/sluminda/ASKLEY.git
+cd ASKLEY
+
+
+STEP 3: CREATE VIRTUAL ENV
+-------------------------
+python -m venv venv
+
+Activate:
+
+Windows:
+venv\Scripts\activate
+
+Linux/Mac:
+source venv/bin/activate
+
+
+STEP 4: INSTALL PACKAGES
+-----------------------
+pip install flask requests
+
+
+STEP 5: INSTALL OLLAMA (LOCAL)
+-----------------------------
+Download from:
+https://ollama.com
+
+Start ollama:
+ollama serve
+
+
+STEP 6: DOWNLOAD MODEL
+---------------------
+ollama pull deepseek-r1:8b
+
+
+STEP 7: RUN APP
+---------------
+python app.py
+
+Open browser:
+http://127.0.0.1:5000
+
+
+STEP 8: TEST FEATURES
+--------------------
+✔ Chat working
+✔ AI responses working
+✔ No errors in terminal
+✔ UI working properly
+
+IMPORTANT:
+Fix all bugs BEFORE going to VPS
+
+
+========================================
+1. CONNECT TO VPS
+========================================
+ssh root@YOUR_SERVER_IP
+
+Example:
+ssh root@139.59.120.230
+
+
+========================================
+2. UPDATE SERVER
+========================================
+apt update && apt upgrade -y
+
+
+========================================
+3. INSTALL REQUIRED PACKAGES
+========================================
+apt install python3 python3-pip python3-venv git nginx curl -y
+
+
+========================================
+4. INSTALL OLLAMA (SERVER)
+========================================
+curl -fsSL https://ollama.com/install.sh | sh
+
+Start:
+ollama serve
+
+
+========================================
+5. DOWNLOAD AI MODEL
+========================================
+ollama pull deepseek-r1:8b
+
+Check:
+ollama list
+
+
+========================================
+6. CLONE PROJECT
+========================================
+cd /var/www
+git clone https://github.com/sluminda/ASKLEY.git
+cd ASKLEY
+
+
+========================================
+7. SETUP PYTHON ENVIRONMENT
+========================================
+python3 -m venv venv
+source venv/bin/activate
+
+pip install --upgrade pip
+pip install flask requests gunicorn
+
+
+========================================
+8. TEST ON SERVER (VERY IMPORTANT)
+========================================
+python3 app.py
+
+Open:
+http://YOUR_SERVER_IP:5000
+
+✔ Chat working?
+✔ AI responding?
+
+If NOT → fix before continue
+
+
+========================================
+9. RUN WITH GUNICORN
+========================================
+venv/bin/gunicorn --bind 127.0.0.1:8000 app:app
+
+
+========================================
+10. CREATE SYSTEMD SERVICE
+========================================
+nano /etc/systemd/system/askley.service
+
+Paste:
+
+[Unit]
+Description=Askley Flask App
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/var/www/ASKLEY
+Environment="PATH=/var/www/ASKLEY/venv/bin"
+ExecStart=/var/www/ASKLEY/venv/bin/gunicorn --workers 2 --bind 127.0.0.1:8000 --timeout 180 app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+Then run:
+systemctl daemon-reload
+systemctl enable askley
+systemctl start askley
+
+
+========================================
+11. CLOUDFLARE SETUP
+========================================
+
+STEP 1: ADD DOMAIN
+-----------------
+Add domain in Cloudflare
+
+STEP 2: CHANGE NAMESERVERS
+--------------------------
+Replace nameservers in your domain provider with Cloudflare ones
+
+Wait until:
+✅ ACTIVE
+
+
+STEP 3: ADD DNS
+---------------
+A record:
+@ → YOUR_SERVER_IP
+
+A record:
+www → YOUR_SERVER_IP
+
+Set:
+DNS ONLY (grey cloud)
+
+
+STEP 4: REMOVE WRONG RECORDS
+----------------------------
+Delete:
+- AAAA records
+- duplicates
+
+
+========================================
+12. NGINX SETUP
+========================================
+nano /etc/nginx/sites-available/askley
+
+Paste:
+
+server {
+    listen 80;
+    server_name askley.site www.askley.site;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+
+Enable:
+ln -s /etc/nginx/sites-available/askley /etc/nginx/sites-enabled/
+
+Test:
+nginx -t
+
+Restart:
+systemctl restart nginx
+
+
+========================================
+13. SSL (HTTPS)
+========================================
+apt install certbot python3-certbot-nginx -y
+
+certbot --nginx -d askley.site -d www.askley.site
+
+
+========================================
+14. CLOUDFLARE FINAL SETTINGS
+========================================
+SSL Mode → FULL (STRICT)
+
+Turn proxy ON (orange cloud)
+
+
+========================================
+15. RESTART
+========================================
+systemctl restart askley
+systemctl restart nginx
+
+
+========================================
+16. DEBUG / LOGS
+========================================
+journalctl -u askley -f
+tail -f /var/log/nginx/error.log
+
+
+========================================
+DONE ✅
+========================================
