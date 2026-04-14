@@ -13,11 +13,18 @@ function createMessageRow(text, sender, isTyping = false) {
 
     const message = document.createElement("div");
     message.classList.add("message", sender);
-    message.textContent = text;
+
+    // bot message render as markdown, user message normal text
+    if (sender === "bot") {
+        message.innerHTML = marked.parse(text);
+    } else {
+        message.textContent = text;
+    }
 
     // this is for showing thinking text little differnt
     if (isTyping) {
         message.classList.add("typing");
+        message.textContent = text;
     }
 
     if (sender === "bot") {
@@ -88,5 +95,6 @@ chatForm.addEventListener("submit", async function (e) {
         sendButton.disabled = false;
         messageInput.disabled = false;
         messageInput.focus();
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 });

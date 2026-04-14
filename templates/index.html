@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ASKLEY</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='bot_icon.png') }}">
@@ -49,12 +49,19 @@
         </section>
 
         <form id="chat-form" class="chat-form">
-            <input type="text" id="message" placeholder="Type your message..." required>
+            <input
+                    type="text"
+                    id="message"
+                    placeholder="Type your message..."
+                    autocomplete="off"
+                    required
+            >
             <button type="submit" id="send-btn">Send</button>
         </form>
     </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
