@@ -76,7 +76,7 @@ Askley solves this by using a **locally hosted AI model via Ollama**, giving ful
 - Provide an AI chatbot interface
 - Enable real-time user interaction
 - Use local AI (Ollama) instead of cloud APIs
-- Demonstrate full-stack + deployment knowledge
+- Demonstrate deployment knowledge
 
 ---
 
@@ -96,7 +96,7 @@ Askley solves this by using a **locally hosted AI model via Ollama**, giving ful
 
 ## 🧠 System Architecture
 
-```text
+
 User (Browser)
       ↓
 Frontend (HTML, CSS, JavaScript)
