@@ -160,7 +160,6 @@ Uses **marked.js** to:
 
 ## 📂 Project Structure
 
-```text
 ASKLEY/
 ├── app.py
 ├── templates/
