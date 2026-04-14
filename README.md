@@ -241,7 +241,6 @@ All team members participated collaboratively in both **development** and **docu
 
 Their collective responsibilities included:
 
-- system planning and design
 - frontend and backend development
 - testing and debugging
 - documentation preparation and refinement
@@ -279,25 +278,10 @@ The project was completed through a shared team effort, with each member contrib
 
 ---
 
-## 🔮 Future Improvements
-
-Potential future enhancements for Askley include:
-
-- user authentication and login system
-- persistent chat history storage
-- streaming AI responses in real time
-- support for multiple AI models
-- voice input and output features
-- admin dashboard for monitoring and management
-- database integration for saved conversations
-
----
-
 ## 📌 Academic Purpose
 
 This project was developed for academic and educational purposes to demonstrate:
 
-- full-stack web application development
 - integration of AI into practical systems
 - real-world deployment on a VPS server
 - collaborative software documentation practices
